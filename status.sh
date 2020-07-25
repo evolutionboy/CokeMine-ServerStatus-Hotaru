@@ -668,6 +668,23 @@ Install_jq(){
 	fi
 }
 
+Install_ServerStatus_server(){
+	[[ -e "${server_file}/sergate" ]] && echo -e "${Error} 检测到 ServerStatus 服务端已安装 !" && exit 1
+	Set_server_port
+	echo -e "${Info} 开始安装/配置 依赖..."
+	Installation_dependency "server"
+	echo -e "${Info} 开始下载/安装..."
+	Download_Server_Status_server
+	Install_jq
+	echo -e "${Info} 开始下载/安装 服务脚本(init)..."
+	Service_Server_Status_server
+	echo -e "${Info} 开始写入 配置文件..."
+	Write_server_config
+	Write_server_config_conf
+	echo -e "${Info} 所有步骤 安装完毕，开始启动..."
+	Start_ServerStatus_server
+}
+
 
 Install_ServerStatus_client(){
 	[[ -e "${client_file}/status-client.py" ]] && echo -e "${Error} 检测到 ServerStatus 客户端已安装 !" && exit 1
