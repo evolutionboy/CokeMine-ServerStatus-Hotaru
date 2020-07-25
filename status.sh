@@ -667,64 +667,8 @@ Install_jq(){
 		echo -e "${Info} JQ解析器 已安装，继续..."
 	fi
 }
-Install_caddy(){
-	echo
-	echo -e "${Info} 是否由脚本自动配置HTTP服务(服务端的在线监控网站)，如果选择 N，则请在其他HTTP服务中配置网站根目录为：${Green_font_prefix}${web_file}${Font_color_suffix} [Y/n]"
-	read -e -p "(默认: Y 自动部署):" caddy_yn
-	[[ -z "$caddy_yn" ]] && caddy_yn="y"
-	if [[ "${caddy_yn}" == [Yy] ]]; then
-		Set_server "server"
-		Set_server_http_port
-		if [[ ! -e "/usr/local/caddy/caddy" ]]; then
-			wget  https://raw.githubusercontent.com/CokeMine/ServerStatus-Hotaru/master/caddy/caddy_install.sh
-			chmod +x caddy_install.sh
-			bash caddy_install.sh install
-			rm -rf caddy_install.sh
-			[[ ! -e "/usr/local/caddy/caddy" ]] && echo -e "${Error} Caddy安装失败，请手动部署，Web网页文件位置：${Web_file}" && exit 1
-		else
-			echo -e "${Info} 发现Caddy已安装，开始配置..."
-		fi
-		if [[ ! -s "/usr/local/caddy/Caddyfile" ]]; then
-			cat > "/usr/local/caddy/Caddyfile"<<-EOF
-http://${server_s}:${server_http_port_s} {
- root ${web_file}
- timeouts none
- gzip
-}
-EOF
-			/etc/init.d/caddy restart
-		else
-			echo -e "${Info} 发现 Caddy 配置文件非空，开始追加 ServerStatus 网站配置内容到文件最后..."
-			cat >> "/usr/local/caddy/Caddyfile"<<-EOF
-http://${server_s}:${server_http_port_s} {
- root ${web_file}
- timeouts none
- gzip
-}
-EOF
-			/etc/init.d/caddy restart
-		fi
-	else
-		echo -e "${Info} 跳过 HTTP服务部署，请手动部署，Web网页文件位置：${web_file} ，如果位置改变，请注意修改服务脚本文件 /etc/init.d/status-server 中的 WEB_BIN 变量 !"
-	fi
-}
-Install_ServerStatus_server(){
-	[[ -e "${server_file}/sergate" ]] && echo -e "${Error} 检测到 ServerStatus 服务端已安装 !" && exit 1
-	Set_server_port
-	echo -e "${Info} 开始安装/配置 依赖..."
-	Installation_dependency "server"
-	Install_caddy
-	echo -e "${Info} 开始下载/安装..."
-	Download_Server_Status_server
-	Install_jq
-	echo -e "${Info} 开始下载/安装 服务脚本(init)..."
-	Service_Server_Status_server
-	echo -e "${Info} 开始写入 配置文件..."
-	Write_server_config
-	Write_server_config_conf
-	echo -e "${Info} 所有步骤 安装完毕，开始启动..."
-	Start_ServerStatus_server
-}
+
+
 Install_ServerStatus_client(){
 	[[ -e "${client_file}/status-client.py" ]] && echo -e "${Error} 检测到 ServerStatus 客户端已安装 !" && exit 1
 	check_sys
@@ -825,7 +769,7 @@ Uninstall_ServerStatus_server(){
 			rm -rf "${file}"
 		fi
 		rm -rf "/etc/init.d/status-server"
-		if [[ -e "/etc/init.d/caddy" ]]; then
+		if [[ -e "/etc/init.d/" ]]; then
 			/etc/init.d/caddy stop
 			wget  https://raw.githubusercontent.com/CokeMine/ServerStatus-Hotaru/master/caddy/caddy_install.sh
 			chmod +x caddy_install.sh
