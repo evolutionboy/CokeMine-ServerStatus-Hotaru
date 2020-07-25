@@ -769,7 +769,7 @@ Uninstall_ServerStatus_server(){
 			rm -rf "${file}"
 		fi
 		rm -rf "/etc/init.d/status-server"
-		if [[ -e "/etc/init.d/" ]]; then
+		if [[ -e "/etc/init.d/caddy" ]]; then
 			/etc/init.d/caddy stop
 			wget  https://raw.githubusercontent.com/CokeMine/ServerStatus-Hotaru/master/caddy/caddy_install.sh
 			chmod +x caddy_install.sh
