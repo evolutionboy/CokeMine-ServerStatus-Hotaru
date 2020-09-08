@@ -64,7 +64,7 @@ check_pid_client(){
 }
 Download_Server_Status_server(){
 	cd "/tmp"
-	wget https://github.com/CokeMine/ServerStatus-Hotaru/archive/master.zip
+   	wget https://github.com/evolutionboy/CokeMine-ServerStatus-Hotaru/archive/master.zip
 	[[ ! -e "master.zip" ]] && echo -e "${Error} ServerStatus 服务端下载失败 !" && exit 1
 	unzip master.zip
 	rm -rf master.zip
