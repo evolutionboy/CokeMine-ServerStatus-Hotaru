@@ -158,43 +158,7 @@ Service_Server_Status_client(){
 	fi
 	echo -e "${Info} ServerStatus 客户端服务管理脚本下载完成 !"
 }
-Installation_dependency(){
-	mode=$1
-	[[ -z ${mode} ]] && mode="server"
-	if [[ ${mode} == "server" ]]; then
-		python_status=$(python --help)
-		if [[ ${release} == "centos" ]]; then
-			yum update
-			if [[ -z ${python_status} ]]; then
-				yum install -y python unzip vim make
-				yum groupinstall "Development Tools" -y
-			else
-				yum install -y unzip vim make
-				yum groupinstall "Development Tools" -y
-			fi
-		else
-			apt-get update
-			if [[ -z ${python_status} ]]; then
-				apt-get install -y python unzip vim build-essential make
-			else
-				apt-get install -y unzip vim build-essential make
-			fi
-		fi
-	else
-		python_status=$(python --help)
-		if [[ ${release} == "centos" ]]; then
-			if [[ -z ${python_status} ]]; then
-				yum update
-				yum install -y python
-			fi
-		else
-			if [[ -z ${python_status} ]]; then
-				apt-get update
-				apt-get install -y python
-			fi
-		fi
-	fi
-}
+
 Write_server_config(){
 	cat > ${server_conf}<<-EOF
 {"servers":
