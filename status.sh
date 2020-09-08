@@ -656,7 +656,7 @@ Install_ServerStatus_client(){
 	if [[ ${release} == "centos" ]]; then
 		cat /etc/redhat-release |grep 8\..*|grep -i centos>/dev/null
 		if [[ $? != 0 ]]; then
-			echo -e "${Info} 检测到你的系统不是 CentOS8，该系统自带的 Python2.6 版本过低，会导致无法运行客户端，如果你有能力升级为 Python2.7，那么请继续(否则建议更换系统)：[y/N]"
+			echo -e "${Info} 检测到你的系统不是 CentOS8，centos6系统自带的 2.6 版本过低，会导致无法运行客户端，centos7到是可以。这个版本已经采用python3，如果你有能力升级为 Python3以上，那么请继续(否则建议更换系统)：[y/N]"
 			read -e -p "(默认: N 继续安装):" sys_centos6
 			[[ -z "$sys_centos6" ]] && sys_centos6="n"
 			if [[ "${
